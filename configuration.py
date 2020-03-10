@@ -21,6 +21,7 @@ if not os.path.isdir(str(Path(str(Path(__file__).parents[0]) + "/temp"))):
     os.mkdir(str(Path(str(Path(__file__).parents[0]) + "/temp")))
 temp = (str(Path(str(Path(__file__).parents[0]) + "/temp")))
 resources = (str(Path(str(Path(__file__).parents[2]) + "/resources/ampp")))
+TEMPLATES = (str(Path(str(Path(__file__).parents[0]) + "/templates")))
 
 
 asgi_host = parser.get("REPORT", "asgi_host")
