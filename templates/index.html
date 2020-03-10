@@ -1,0 +1,127 @@
+<meta charset="UTF-8">
+<meta http-equiv="cache-control" content="max-age=0" />
+<meta http-equiv="cache-control" content="no-cache" />
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script>
+	(function (factory) {
+		if (typeof define === "function" && define.amd) {
+
+			// AMD. Register as an anonymous module.
+			define(["../widgets/datepicker"], factory);
+		} else {
+
+			// Browser globals
+			factory(jQuery.datepicker);
+		}
+	}(function (datepicker) {
+
+		datepicker.regional.ru = {
+			closeText: "Закрыть",
+			prevText: "&#x3C;Пред",
+			nextText: "След&#x3E;",
+			currentText: "Сегодня",
+			monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+				"Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+			monthNamesShort: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн",
+				"Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+			dayNames: ["воскресенье", "понедельник", "вторник", "среда", "четверг", "пятница", "суббота"],
+			dayNamesShort: ["вск", "пнд", "втр", "срд", "чтв", "птн", "сбт"],
+			dayNamesMin: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+			weekHeader: "Нед",
+			dateFormat: "dd.mm.yy",
+			firstDay: 1,
+			isRTL: false,
+			showMonthAfterYear: false,
+			yearSuffix: ""
+		};
+		datepicker.setDefaults(datepicker.regional.ru);
+
+		return datepicker.regional.ru;
+
+	}));
+
+
+	$(function () {
+		$.datepicker.setDefaults($.datepicker.regional["ru"]);
+		$("#datepicker_from").datepicker();
+	});
+	$(function () {
+		$.datepicker.setDefaults($.datepicker.regional["ru"]);
+		$("#datepicker_to").datepicker();
+	});
+	function refreshPage() {
+		window.location.reload();
+	}
+	function required() {
+		var report_type = document.data.option.value;
+		var dt_to = document.data.date_to.value;
+		var dt_from = document.data.date_from.value;
+		var dt_from_parts = document.data.date_from.value.split('.');
+		var dt_to_parts = document.data.date_to.value.split('.');
+		var dt_to_date = new Date(dt_to_parts[2], dt_to_parts[1] - 1, dt_to_parts[0]);
+		var dt_from_date = new Date(dt_from_parts[2], dt_from_parts[1] - 1, dt_from_parts[0]);
+		if (report_type === "") {
+			alert("Выберите тип отчета");
+			return false;
+		}
+		else if (dt_from == "") {
+			alert("Выберите начальную дату");
+			return false;
+		}
+		else if (dt_to == "") {
+			alert("Выберите конечную дату");
+			return false;
+		}
+		else if (dt_to == "" || dt_from == "") {
+			alert("Определите интервал");
+			return false;
+		}
+		else if (dt_from_date.getDate > dt_to_date.getDate) {
+			alert("Неверный интервал");
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+</script>
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Came reports center</title>
+<link rel="shortcut icon" href="./public/img/favicon.ico" type="image/vnd.microsoft.icon" />
+
+<div data-role="page" id="dashboard" data-theme="a">
+	<div data-role="header">
+		<h1>Отчеты</h1>
+	</div>
+	<div data-role="main" class="ui-content">
+		<form name="data" id="submit" action="/" method="POST" onsubmit="return required()">
+			<fieldset data-role="controlgroup" data-type="horizontal">
+				         <legend>Тип отчета:</legend>
+				         <input type="radio" name="option" id="radio-choice-v-2a" value="detailed">
+				         <label for="radio-choice-v-2a">Детальный</label>
+				         <input type="radio" name="option" id="radio-choice-v-2b" value="consolidated">
+				         <label for="radio-choice-v-2b">Сводный</label>
+			</fieldset>
+			<label for="datepicker_from">Начальная дата</label>
+			<input type="text" name="date_from" id="datepicker_from" required>
+			<label for="datepicker_to">Конечная дата</label>
+			<input type="text" name="date_to" id="datepicker_to" required>
+			<button form="submit" class="ui-shadow ui-btn ui-corner-all" id="post">Сгенерировать</button>
+		</form>
+		<form id="download" method="get" action="/download" target="_blank" onclick="refreshPage()">
+			{% if enabled %}
+			<button form="download" type="submit">Скачать</button>
+			{% else %}
+			<button form="download" type="submit" disabled>Скачать</button>
+			{% endif %}
+
+		</form>
+	</div>
+</div>
