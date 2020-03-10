@@ -17,6 +17,8 @@ wp_cnx = {"user": parser.get("WISEPARK", "rdbs_user"),
 parking_id = parser.getint("AMPP", "parking_id")
 parking_addr = parser.get("AMPP", "parking_address")
 
+if not os.path.isdir(str(Path(str(Path(__file__).parents[0]) + "/temp"))):
+    os.mkdir(str(Path(str(Path(__file__).parents[0]) + "/temp")))
 temp = (str(Path(str(Path(__file__).parents[0]) + "/temp")))
 resources = (str(Path(str(Path(__file__).parents[2]) + "/resources/ampp")))
 
